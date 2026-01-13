@@ -1,0 +1,10 @@
+{
+  "name": "Counter App Brown",
+  "short_name": "Counter",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#EFEBE9",
+  "theme_color": "#5D4037",
+  "description": "A simple counter app with brown theme",
+  "orientation": "portrait-primary"
+}
