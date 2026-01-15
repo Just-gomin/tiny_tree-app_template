@@ -1,58 +1,156 @@
 # Tiny Tree App Template
 
-## 목표
+AI 기반 소프트웨어 개발 자동화 시스템 **Tiny Tree**의 Flutter 앱 템플릿 프로젝트입니다.
 
-AI를 활용해 MVP 를 검증하기 위한 프로젝트를 생성하는 프로젝트.
-아이디어 입력부터 배포까지 1시간 이내 완료를 목표로 하는 자동화 시스템 입니다.
+## 비전
+
+**AI를 활용하여 아이디어부터 프로덕션까지, 소프트웨어 개발의 전 과정을 자동화한다.**
+
+- **초기 목표**: 1시간 내 MVP 생성 및 배포
+- **중장기 목표**: 대규모 프로젝트의 지속 가능한 개발 지원
 
 ## 기술 스택
 
-- Dart: 코어 패키지 제작
-- Flutter: 앱 및 패키지 제작
-- Firebase: 서버리스 운영
+| 구분 | 기술 | 용도 |
+| :------: | :------: | :------: |
+| Language | Dart | 코어 패키지 제작 |
+| Framework | Flutter | 앱 및 UI 패키지 제작 |
+| Package Manager | Melos | 모노레포 관리 |
+| Backend | Firebase / Supabase | 서버리스 운영 |
 
-## 방식
+## 프로젝트 구조
 
-### `packages`
+```text
+tiny_tree-app_template/
+├── apps/                    # 생성된 앱들
+│   └── [generated_app]/
+├── packages/                # 재사용 가능한 패키지
+│   ├── core/                # 필수 기반
+│   ├── features/            # 비즈니스 기능
+│   ├── integrations/        # 서드파티 연동
+│   └── testing/             # 테스트 유틸리티
+└── melos.yaml
+```
 
-도메인, 비즈니스, 프레젠테이션 레이어를 비롯해 서드 파티 API를 지원하는 Dart/Flutter 패키지 디렉토리.
+### `apps/`
 
-### `apps`
+`packages/`에 정의된 패키지를 조합하여 생성되는 앱들이 위치합니다. Claude Code가 사용자 요구사항에 맞게 앱을 생성합니다.
 
-`packages`에 정의된 패키지를 이용해 사용자의 주문에 맞게 작성되는 APP 들이 모인 디렉토리.
+### `packages/`
+
+재사용 가능한 기능 패키지들이 위치합니다. 기능별로 분리되어 있어 필요한 패키지만 선택적으로 사용할 수 있습니다.
+
+## 패키지 구조
+
+### 설계 원칙
+
+| 원칙 | 설명 |
+| :------: | :------: |
+| **기능별 분리** | 레이어별이 아닌 기능별로 패키지 분리 |
+| **선택적 의존성** | 필요한 기능만 import하여 사용 |
+| **독립적 확장** | 각 패키지 내부만 수정하여 기능 고도화 |
+| **명확한 Public API** | 배럴 파일을 통한 인터페이스 제공 |
+
+### 패키지 분류
+
+```text
+packages/
+├── core/                    # 필수 기반 (모든 앱 공통)
+│   ├── theme/               # 테마, 색상, 타이포그래피
+│   ├── ui_kit/              # 공용 위젯
+│   ├── utils/               # 유틸리티 함수
+│   ├── storage/             # 로컬 저장소 추상화
+│   └── network/             # HTTP 클라이언트, 에러 핸들링
+│
+├── features/                # 비즈니스 기능 (선택적)
+│   ├── auth/                # 인증
+│   ├── payment/             # 결제
+│   ├── analytics/           # 분석
+│   ├── notification/        # 알림
+│   ├── onboarding/          # 온보딩
+│   ├── settings/            # 설정
+│   └── feedback/            # 사용자 피드백
+│
+├── integrations/            # 서드파티 래퍼 (교체 가능)
+│   ├── firebase/
+│   ├── supabase/
+│   └── revenue_cat/
+│
+└── testing/                 # 테스트 유틸리티
+    ├── mocks/
+    └── fixtures/
+```
+
+### 기능 패키지 내부 구조
+
+각 기능 패키지 내부에서는 레이어를 유지하되 단순화합니다:
+
+```text
+packages/features/auth/
+├── lib/
+│   ├── auth.dart            # 배럴 파일 (public API)
+│   └── src/
+│       ├── domain/          # 엔티티, 유스케이스
+│       ├── data/            # 레포지토리 구현
+│       └── presentation/    # 위젯, 화면
+└── pubspec.yaml
+```
 
 ## MVP 제작 과정
 
-### 1. 아이디어 입력 (Slack Bot)
+```text
+1. 아이디어 입력
+   └─▶ Slack: /mvp 또는 기획서 업로드
 
-동명의 프로젝트 [Tiny Tree의 Slack Bot](https://github.com/Just-gomin/tiny_tree-slack_bot) 프로젝트를 통해 슬랙으로 아이디어 혹은 기획서, 회의의 녹음본을 전달 받습니다.
+2. 계획 설계
+   └─▶ Claude: 1시간 내 구현 가능한 범위로 축소
+   └─▶ 산출물: PLAN.md, SPEC.md
 
-### 2. 계획 세우기 (Claude Code)
+3. 기능 개발
+   └─▶ Claude: 패키지 조합 + 커스텀 코드 생성
+   └─▶ 산출물: Flutter 앱
 
-입력으로 부터 최소 기능을 구현하기 위한 계획을 세웁니다.
+4. 배포
+   └─▶ Firebase Hosting (웹)
+   └─▶ Firebase App Distribution (모바일)
 
-### 3. 기능 개발 (Claude Code)
+5. 피드백 및 수정
+   └─▶ Slack 스레드로 수정 요청
+   └─▶ 2단계로 돌아가 반복
+```
 
-위 2단계에서 작성된 계획서를 통해 MVP 프로젝트를 제작합니다.
+## 로드맵
 
-### 4. 배포 (Firebase)
+### Phase 1: MVP 자동화 (현재)
 
-3단계에서 제작된 MVP를 Firebase 를 이용해 배포 합니다.
+- 1시간 내 MVP 생성 및 배포
+- 단순한 단일/소수 화면 앱
+- 로컬 상태 관리, 기본 UI
 
-- 웹: Firebase Hosting
-- 모바일: Firebase Distribution
+### Phase 2: 피드백 기반 반복 개선
 
-### 5. 검수 및 수정 (Slack Bot, Claude)
+- Slack 스레드 기반 피드백 수집
+- 증분 업데이트 (변경 부분만 수정)
+- 버전 히스토리 관리
 
-4단계에서 배포된 앱을 사람이 직접 조작해 본 뒤, 수정 요청을 입력 합니다.
-다시 2단계로 돌아가 과정을 반복합니다.
+### Phase 3: 상업용 앱 수준 기능 지원
 
-## 고도화 계획
+- 인증 시스템 (소셜 로그인, 권한 체계)
+- 결제 연동 (인앱결제, 구독 관리)
+- 분석 및 모니터링 통합
 
-### 계획 및 할 일(Task) 운영 고도화
+### Phase 4: 대규모 프로젝트 지속 개발
 
-할 일을 데이터 베이스로 관리해, 큰 규모의 앱을 제작할 수 있도록 확장할 예정입니다.
+- Task 기반 개발 (할 일 DB 관리)
+- 모듈 단위 독립 개발/배포
+- 자동 테스트, CI/CD
 
-### 결제 등 다양한 써드파티 기능 연결
+## 관련 프로젝트
 
-상업용 앱을 만들기 위해 다양한 결제 서비스등 써드파티들을 이용할 수 있도록 패키지를 지속 개발합니다.
+| 프로젝트 | 설명 |
+| :---------: | ":------: |
+| [tiny_tree-slack_bot](https://github.com/Just-gomin/tiny_tree-slack_bot) | Slack Bot - 사용자 인터페이스, 파이프라인 오케스트레이션 |
+
+## 라이선스
+
+MIT License

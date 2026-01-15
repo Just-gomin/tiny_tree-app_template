@@ -76,3 +76,6 @@ devtools_options.yaml
 
 # Build
 build
+
+# Claude local setting
+.claude/settings.local.json
