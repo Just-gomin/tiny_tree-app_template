@@ -2,6 +2,7 @@ name: tiny_tree_app_template
 repository: https://github.com/Just-gomin/tiny_tree-app_template
 
 packages:
+  - apps/*
   - packages/*
 
 command:
