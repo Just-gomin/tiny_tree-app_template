@@ -2,8 +2,28 @@ name: tiny_tree_app_template
 repository: https://github.com/Just-gomin/tiny_tree-app_template
 
 packages:
-  - packages/*
+  - packages/core/storage
+  - packages/features/auth
 
 command:
   version:
     linkToCommits: true
+  bootstrap:
+    environment:
+      sdk: ^3.9.0
+    dependencies:
+      flutter_secure_storage: ^10.0.0
+      shared_preferences: ^2.5.4
+    dev_dependencies:
+      mocktail: ^1.0.4
+    hooks:
+      post: |
+        dart run melos build_runner:build
+
+scripts:
+  build_runner:build:
+    run: |
+      dart run melos exec -c 1 --depends-on="build_runner" --scope="*core" -- \
+      "dart run build_runner build --delete-conflicting-outputs"
+    description: |
+      Run `dart run build_runner watch` for all packages.

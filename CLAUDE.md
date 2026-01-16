@@ -142,6 +142,22 @@ export 'src/presentation/screens/screens.dart';
 export 'src/presentation/widgets/widgets.dart';
 ```
 
+### melos.yaml에 의존성 관리
+
+```yaml
+...
+
+command:
+  ...
+  bootstrap:
+    environment:
+      sdk: ^3.9.0
+    dependencies:
+      # 패키지들에서 사용하는 의존성 추가
+    dev_dependencies:
+      # 패키지 개발에 필요한 의존성 추가
+```
+
 ## Creating New App
 
 ### 앱 생성 절차
