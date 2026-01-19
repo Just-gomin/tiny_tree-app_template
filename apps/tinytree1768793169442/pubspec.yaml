@@ -1,0 +1,22 @@
+name: tinytree1768793169442
+description: 초록색 카운터 앱 MVP
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  storage:
+    path: ../../packages/core/storage
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

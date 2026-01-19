@@ -1,0 +1,20 @@
+name: tinytree1768788015408
+description: Hello World Multilingual MVP - 다국어 인사말 표시 앱
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.9.0
+  flutter: ">=3.29.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
