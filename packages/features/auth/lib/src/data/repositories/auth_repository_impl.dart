@@ -5,6 +5,7 @@ import '../../domain/failures/auth_failure.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_datasource.dart';
 import '../datasources/auth_local_datasource.dart';
+import '../exceptions/exceptions.dart';
 
 /// AuthRepository 구현체
 ///
@@ -14,8 +15,8 @@ class AuthRepositoryImpl implements AuthRepository {
   const AuthRepositoryImpl({
     required AuthDataSource remoteDataSource,
     required AuthLocalDataSource localDataSource,
-  })  : _remoteDataSource = remoteDataSource,
-        _localDataSource = localDataSource;
+  }) : _remoteDataSource = remoteDataSource,
+       _localDataSource = localDataSource;
 
   final AuthDataSource _remoteDataSource;
   final AuthLocalDataSource _localDataSource;
@@ -137,20 +138,3 @@ class AuthRepositoryImpl implements AuthRepository {
     );
   }
 }
-
-// 예외 클래스들 (integrations 패키지에서 실제 구현 시 사용)
-
-/// 잘못된 인증 정보 예외
-class InvalidCredentialsException implements Exception {}
-
-/// 네트워크 예외
-class NetworkException implements Exception {}
-
-/// 사용자 중복 예외
-class UserAlreadyExistsException implements Exception {}
-
-/// 세션 만료 예외
-class SessionExpiredException implements Exception {}
-
-/// 사용자 없음 예외
-class UserNotFoundException implements Exception {}
