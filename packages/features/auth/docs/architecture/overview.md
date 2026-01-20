@@ -64,8 +64,8 @@ dependencies:
 // packages/features/auth/lib/auth.dart
 library;
 
-export 'src/domain/entities/entities.dart';
-export 'src/domain/usecases/usecases.dart';
+export '../../../../../docs/architecture/src/domain/entities/entities.dart';
+export '../../../../../docs/architecture/src/domain/usecases/usecases.dart';
 // ...
 ```
 
