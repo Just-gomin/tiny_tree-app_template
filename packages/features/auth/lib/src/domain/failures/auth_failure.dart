@@ -33,7 +33,7 @@ class NetworkFailure extends AuthFailure {
 /// 서버 에러
 class ServerFailure extends AuthFailure {
   /// 서버 실패 생성자
-  const ServerFailure([super.message = '서버 오류가 발생했습니다.']);
+  const ServerFailure() : super('서버 오류가 발생했습니다.');
 }
 
 /// 사용자를 찾을 수 없음
