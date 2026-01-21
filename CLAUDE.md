@@ -32,6 +32,7 @@ tiny_tree-app_template/
 │   ├── core/                # 순수 Dart 패키지 (Flutter 의존성 없음)
 │   │   ├── domain/          # Entity, Value Object, Failure, Exception
 │   │   ├── network/         # HTTP 클라이언트 (dio 등)
+│   │   ├── storage/         # 저장소의 인터페이스 정의
 │   │   └── utils/           # 순수 Dart 유틸리티 (문자열, 날짜, 숫자 등)
 │   ├── app_core/            # Flutter 의존 패키지 (모든 앱 공통)
 │   │   ├── theme/           # Material Theme, 색상, 타이포그래피
@@ -136,6 +137,8 @@ packages/features/[feature_name]/
    include: ../../../analysis_options.yaml
    ```
 
+    - 디렉토리 깊이에 따라 ../ 개수를 조정
+
 4. `lib/src/` 하위에 구현 코드 작성
 5. 루트에서 `melos bootstrap` 실행
 
@@ -155,6 +158,8 @@ packages/features/[feature_name]/
    ```yaml
    include: ../../../analysis_options.yaml
    ```
+
+    - 디렉토리 깊이에 따라 ../ 개수를 조정
 
 4. `lib/src/` 하위에 구현 코드 작성
 5. 루트에서 `melos bootstrap` 실행
@@ -432,8 +437,8 @@ void main() {
    - 로컬 상태만 사용 (SharedPreferences)
 
 2. **패키지 사용**
-   - `core/` 패키지는 항상 포함
-   - `features/` 패키지는 필요한 것만 선택
+   - `app_core/` 패키지 중 필요한 것만 선택
+   - `features/` 패키지 중 필요한 것만 선택
    - 불필요한 의존성 최소화
 
 3. **코드 품질**
