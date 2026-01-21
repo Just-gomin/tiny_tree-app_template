@@ -119,20 +119,49 @@ packages/features/[feature_name]/
 
 ### 패키지 생성 절차
 
-1. 패키지 위치 결정: `packages/core/` 또는 `packages/app_core/`
-2. `packages/[category]/[package_name]/` 디렉토리 생성
-3. `packages/package_template` 디렉토리 하위 파일 내용을 복사
-4. 패키지 정보 변경
-    - `pubspec.yaml`의 `name`, `description`, 의존성
-    - `README.md`의 제목과 설명
-5. `analysis_options.yaml` 경로 수정
-    - `include: ../../../analysis_options.yaml`
-6. `lib/src/` 하위에 구현 코드 작성
-7. `melos bootstrap` 실행
+#### packages/core/ 패키지 (순수 Dart) 생성
+
+1. 패키지 생성
+
+   ```bash
+   cd packages/core
+   dart create [package_name]
+   cd [package_name]
+   ```
+
+2. `pubspec.yaml` 수정 (아래 템플릿 참조)
+3. `analysis_options.yaml` 생성
+
+   ```yaml
+   include: ../../../analysis_options.yaml
+   ```
+
+4. `lib/src/` 하위에 구현 코드 작성
+5. 루트에서 `melos bootstrap` 실행
+
+#### packages/app_core/ 패키지 (Flutter 의존) 생성
+
+1. 패키지 생성
+
+   ```bash
+   cd packages/app_core
+   flutter create --template=package [package_name]
+   cd [package_name]
+   ```
+
+2. `pubspec.yaml` 수정 (아래 템플릿 참조)
+3. `analysis_options.yaml` 생성
+
+   ```yaml
+   include: ../../../analysis_options.yaml
+   ```
+
+4. `lib/src/` 하위에 구현 코드 작성
+5. 루트에서 `melos bootstrap` 실행
 
 ### pubspec.yaml 템플릿
 
-#### packages/core/ 패키지 (순수 Dart)
+#### packages/core/ 패키지 (순수 Dart) pubspec.yaml
 
 ```yaml
 name: [package_name]
@@ -153,7 +182,7 @@ dev_dependencies:
   test: ^1.25.6
 ```
 
-#### packages/app_core/ 패키지 (Flutter 의존)
+#### packages/app_core/ 패키지 (Flutter 의존) pubspec.yaml
 
 ```yaml
 name: [package_name]
