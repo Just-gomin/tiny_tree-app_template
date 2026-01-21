@@ -7,8 +7,7 @@ environment:
 dev_dependencies:
   melos: ^7.3.0
 
-workspace:
-  - packages/package_template
+workspace: []
 
 melos:
   repository: https://github.com/Just-gomin/tiny_tree-app_template
