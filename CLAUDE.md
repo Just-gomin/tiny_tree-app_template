@@ -13,9 +13,9 @@ Tiny Tree App Template은 AI 기반 소프트웨어 개발 자동화 시스템�
 
 ### 기술 스택
 
-- Dart 3.9+
-- Flutter (Web, Mobile)
-- Melos 7.3+ (모노레포 관리)
+- Dart 3.10+
+- Flutter (Web, Mobile) 3.38+
+- Melos 7.0+ (Dart Pub Workspace 기반 모노레포 관리)
 - Firebase / Supabase (서버리스 백엔드)
 
 ### 관련 프로젝트
@@ -50,8 +50,7 @@ tiny_tree-app_template/
 │   └── testing/             # 테스트 유틸리티
 │       ├── mocks/
 │       └── fixtures/
-├── melos.yaml               # Melos 설정
-├── pubspec.yaml             # 루트 pubspec
+├── pubspec.yaml             # 루트 pubspec (Melos 및 Workspace 설정 포함)
 └── analysis_options.yaml    # Dart 분석 옵션
 ```
 
@@ -110,8 +109,8 @@ version: 0.1.0
 publish_to: none
 
 environment:
-  sdk: ^3.9.0
-  flutter: ">=3.29.0"
+  sdk: ^3.10.0
+  flutter: ">=3.38.0"
 
 dependencies:
   flutter:
@@ -159,18 +158,18 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.10.0
 
 dependencies:
   flutter:
     sdk: flutter
-  
+
   # Core packages (필수)
   theme:
     path: ../../packages/core/theme
   ui_kit:
     path: ../../packages/core/ui_kit
-  
+
   # Feature packages (선택)
   auth:
     path: ../../packages/features/auth
@@ -187,6 +186,9 @@ flutter:
 ## Bash Commands
 
 ### Melos 명령어
+
+**참고**: Melos 7.0+ 이상부터는 Dart의 pub workspace 기능을 기반으로 동작합니다.
+별도의 `melos.yaml` 파일 없이 루트 `pubspec.yaml`에서 workspace와 Melos 설정을 통합 관리합니다.
 
 ```bash
 # 의존성 설치 및 링크
@@ -407,7 +409,7 @@ melos bootstrap
 
 ```bash
 # pubspec.yaml의 path 경로 확인
-# melos.yaml의 packages 설정 확인
+# pubspec.yaml의 workspace 및 melos:command:bootstrap 설정 확인
 melos bootstrap
 ```
 

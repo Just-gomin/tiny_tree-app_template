@@ -2,10 +2,38 @@ name: tiny_tree_app_template
 publish_to: none
 
 environment:
-  sdk: ^3.9.0
+  sdk: ^3.10.0
 
 dev_dependencies:
   melos: ^7.3.0
 
-workspace:
-  - packages
+melos:
+  repository: https://github.com/Just-gomin/tiny_tree-app_template
+
+  command:
+    version:
+      # Only allow versioning to happen on main branch
+      branch: main
+      includeCommitId: true
+      linkToCommits: true
+      changelogs:
+        - path: CHANGELOG.md
+          description: |
+            All notable changes to tiny_tree_app_template's packages.
+          packageFilters:
+            scope: packages/*
+      changelogFormat:
+        includeDate: true
+
+    bootstrap:
+      environment:
+        sdk: ">=3.10.0 <4.0.0"
+        flutter: ">=3.38.0"
+      
+      dependencies:
+      
+      dev_dependencies:
+      
+      hook:
+
+  scripts:
