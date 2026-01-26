@@ -19,6 +19,7 @@ analyzer:
 
 linter:
   rules:
+    always_use_package_imports: false # make simply import files from same packages
     always_put_required_named_parameters_first: false
     avoid_annotating_with_dynamic: false
     avoid_classes_with_only_static_members: false

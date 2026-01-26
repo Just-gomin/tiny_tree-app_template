@@ -1,11 +1,14 @@
 name: domain
 description: A collection of basic types and abstract classes for TinyTree
-version: 0.0.1
+version: 0.1.0
+publish_to: none
+resolution: workspace
 
 environment:
-  sdk: ^3.10.7
+  sdk: ">=3.10.0 <4.0.0"
 
-# dependencies:
+dependencies:
+  equatable: ^2.0.7
 
 dev_dependencies:
   lints: ^6.0.0
