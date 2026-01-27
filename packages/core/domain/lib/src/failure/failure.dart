@@ -22,14 +22,14 @@ import 'package:equatable/equatable.dart';
 /// }
 /// ```
 sealed class Failure extends Equatable {
-  /// 실패에 대한 설명 메시지.
-  final String message;
-
   /// Failure를 생성합니다.
   const Failure(this.message);
 
+  /// 실패에 대한 설명 메시지.
+  final String message;
+
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => <Object?>[message];
 
   @override
   bool get stringify => true;
@@ -39,51 +39,42 @@ sealed class Failure extends Equatable {
 ///
 /// HTTP 요청 실패, 연결 타임아웃, 인터넷 연결 없음 등의 경우에 사용합니다.
 final class NetworkFailure extends Failure {
+  /// NetworkFailure를 생성합니다.
+  const NetworkFailure(super.message, {this.statusCode});
+
   /// HTTP 상태 코드 (선택적).
   final int? statusCode;
 
-  /// NetworkFailure를 생성합니다.
-  const NetworkFailure(
-    super.message, {
-    this.statusCode,
-  });
-
   @override
-  List<Object?> get props => [message, statusCode];
+  List<Object?> get props => <Object?>[message, statusCode];
 }
 
 /// 검증(validation) 실패.
 ///
 /// 입력 데이터가 비즈니스 규칙을 만족하지 못할 때 사용합니다.
 final class ValidationFailure extends Failure {
+  /// ValidationFailure를 생성합니다.
+  const ValidationFailure(super.message, {this.field});
+
   /// 검증에 실패한 필드명 (선택적).
   final String? field;
 
-  /// ValidationFailure를 생성합니다.
-  const ValidationFailure(
-    super.message, {
-    this.field,
-  });
-
   @override
-  List<Object?> get props => [message, field];
+  List<Object?> get props => <Object?>[message, field];
 }
 
 /// 리소스를 찾을 수 없음을 나타내는 실패.
 ///
 /// 데이터베이스 조회 실패, 존재하지 않는 ID 등의 경우에 사용합니다.
 final class NotFoundFailure extends Failure {
+  /// NotFoundFailure를 생성합니다.
+  const NotFoundFailure(super.message, {this.resourceId});
+
   /// 찾을 수 없는 리소스의 식별자 (선택적).
   final String? resourceId;
 
-  /// NotFoundFailure를 생성합니다.
-  const NotFoundFailure(
-    super.message, {
-    this.resourceId,
-  });
-
   @override
-  List<Object?> get props => [message, resourceId];
+  List<Object?> get props => <Object?>[message, resourceId];
 }
 
 /// 인증되지 않은 접근을 나타내는 실패.
@@ -98,36 +89,29 @@ final class UnauthorizedFailure extends Failure {
 ///
 /// 5xx 에러, 예상치 못한 서버 응답 등의 경우에 사용합니다.
 final class ServerFailure extends Failure {
+  /// ServerFailure를 생성합니다.
+  const ServerFailure(super.message, {this.errorCode});
+
   /// 서버 에러 코드 (선택적).
   final String? errorCode;
 
-  /// ServerFailure를 생성합니다.
-  const ServerFailure(
-    super.message, {
-    this.errorCode,
-  });
-
   @override
-  List<Object?> get props => [message, errorCode];
+  List<Object?> get props => <Object?>[message, errorCode];
 }
 
 /// 알 수 없는 실패.
 ///
 /// 다른 실패 타입으로 분류할 수 없는 경우에 사용합니다.
 final class UnknownFailure extends Failure {
+  /// UnknownFailure를 생성합니다.
+  const UnknownFailure(super.message, {this.error, this.stackTrace});
+
   /// 원본 에러 객체 (선택적).
   final Object? error;
 
   /// 스택 트레이스 (선택적).
   final StackTrace? stackTrace;
 
-  /// UnknownFailure를 생성합니다.
-  const UnknownFailure(
-    super.message, {
-    this.error,
-    this.stackTrace,
-  });
-
   @override
-  List<Object?> get props => [message, error, stackTrace];
+  List<Object?> get props => <Object?>[message, error, stackTrace];
 }

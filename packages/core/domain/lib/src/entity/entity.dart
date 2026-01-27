@@ -25,16 +25,16 @@ import 'package:equatable/equatable.dart';
 /// 타입 파라미터:
 /// - [ID]: 엔티티를 식별하는 ID의 타입 (String, int 등)
 abstract class Entity<ID extends Object> extends Equatable {
-  /// 엔티티의 고유 식별자.
-  final ID id;
-
   /// Entity를 생성합니다.
   ///
   /// [id]는 반드시 제공되어야 하며, null이 아니어야 합니다.
   const Entity(this.id);
 
+  /// 엔티티의 고유 식별자.
+  final ID id;
+
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => <Object?>[id];
 
   @override
   bool get stringify => true;

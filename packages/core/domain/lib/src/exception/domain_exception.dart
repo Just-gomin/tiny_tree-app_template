@@ -17,6 +17,9 @@
 /// }
 /// ```
 class DomainException implements Exception {
+  /// DomainException을 생성합니다.
+  const DomainException(this.message, {this.cause, this.stackTrace});
+
   /// 예외 메시지.
   final String message;
 
@@ -25,13 +28,6 @@ class DomainException implements Exception {
 
   /// 스택 트레이스 (선택적).
   final StackTrace? stackTrace;
-
-  /// DomainException을 생성합니다.
-  const DomainException(
-    this.message, {
-    this.cause,
-    this.stackTrace,
-  });
 
   @override
   String toString() {
@@ -50,9 +46,6 @@ class DomainException implements Exception {
 ///
 /// 비즈니스 규칙 위반 시 발생합니다.
 class ValidationException extends DomainException {
-  /// 검증에 실패한 필드명 (선택적).
-  final String? field;
-
   /// ValidationException을 생성합니다.
   const ValidationException(
     super.message, {
@@ -60,6 +53,9 @@ class ValidationException extends DomainException {
     super.cause,
     super.stackTrace,
   });
+
+  /// 검증에 실패한 필드명 (선택적).
+  final String? field;
 
   @override
   String toString() {

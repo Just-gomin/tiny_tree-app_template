@@ -46,14 +46,14 @@ sealed class Result<F extends Failure, S> extends Equatable {
 
   /// 성공 값을 가져옵니다. 실패인 경우 null을 반환합니다.
   S? get valueOrNull => switch (this) {
-    Success(:final S value) => value,
-    Error() => null,
+    Success<F, S>(:final S value) => value,
+    Error<F, S>() => null,
   };
 
   /// 실패 값을 가져옵니다. 성공인 경우 null을 반환합니다.
   F? get failureOrNull => switch (this) {
-    Success() => null,
-    Error(:final F failure) => failure,
+    Success<F, S>() => null,
+    Error<F, S>(:final F failure) => failure,
   };
 
   /// Result를 다른 타입으로 변환합니다.
@@ -72,8 +72,8 @@ sealed class Result<F extends Failure, S> extends Equatable {
     required R Function(F failure) onError,
   }) {
     return switch (this) {
-      Success(:final S value) => onSuccess(value),
-      Error(:final F failure) => onError(failure),
+      Success<F, S>(:final S value) => onSuccess(value),
+      Error<F, S>(:final F failure) => onError(failure),
     };
   }
 
@@ -85,8 +85,8 @@ sealed class Result<F extends Failure, S> extends Equatable {
   /// ```
   Result<F, R> map<R>(R Function(S value) mapper) {
     return switch (this) {
-      Success(:final S value) => Success(mapper(value)),
-      Error(:final F failure) => Error(failure),
+      Success<F, S>(:final S value) => Success<F, R>(mapper(value)),
+      Error<F, S>(:final F failure) => Error<F, R>(failure),
     };
   }
 
@@ -100,32 +100,32 @@ sealed class Result<F extends Failure, S> extends Equatable {
   /// ```
   Result<F, R> flatMap<R>(Result<F, R> Function(S value) mapper) {
     return switch (this) {
-      Success(:final S value) => mapper(value),
-      Error(:final F failure) => Error(failure),
+      Success<F, S>(:final S value) => mapper(value),
+      Error<F, S>(:final F failure) => Error<F, R>(failure),
     };
   }
 
   /// 실패 값을 변환합니다. 성공인 경우 그대로 반환합니다.
   Result<R, S> mapError<R extends Failure>(R Function(F failure) mapper) {
     return switch (this) {
-      Success(:final S value) => Success(value),
-      Error(:final F failure) => Error(mapper(failure)),
+      Success<F, S>(:final S value) => Success<R, S>(value),
+      Error<F, S>(:final F failure) => Error<R, S>(mapper(failure)),
     };
   }
 
   /// 성공 값을 가져오거나, 실패인 경우 기본값을 반환합니다.
   S getOrElse(S defaultValue) {
     return switch (this) {
-      Success(:final S value) => value,
-      Error() => defaultValue,
+      Success<F, S>(:final S value) => value,
+      Error<F, S>() => defaultValue,
     };
   }
 
   /// 성공 값을 가져오거나, 실패인 경우 함수를 실행하여 값을 생성합니다.
   S getOrElseLazy(S Function(F failure) onError) {
     return switch (this) {
-      Success(:final S value) => value,
-      Error(:final F failure) => onError(failure),
+      Success<F, S>(:final S value) => value,
+      Error<F, S>(:final F failure) => onError(failure),
     };
   }
 
