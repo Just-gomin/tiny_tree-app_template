@@ -21,17 +21,53 @@ class ReviewScreen extends StatefulWidget {
 
 class _ReviewScreenState extends State<ReviewScreen> {
   late TextEditingController _controller;
+  late TextEditingController _instructionController;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController(text: widget.inquiry.aiResponse ?? '');
+    _instructionController = TextEditingController();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _instructionController.dispose();
     super.dispose();
+  }
+
+  void _regenerateResponse() {
+    final instruction = _instructionController.text.toLowerCase().trim();
+    final variants = widget.inquiry.responseVariants;
+
+    if (variants == null || variants.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('재생성 옵션을 사용할 수 없습니다')),
+      );
+      return;
+    }
+
+    String selectedResponse;
+
+    // Keyword matching for MVP (no real AI API)
+    if (instruction.contains('친근') || instruction.contains('friendly') || instruction.contains('따뜻')) {
+      selectedResponse = variants.length > 1 ? variants[1] : variants[0];
+    } else if (instruction.contains('할인') || instruction.contains('discount') ||
+               instruction.contains('쿠폰') || instruction.contains('coupon')) {
+      selectedResponse = variants.length > 2 ? variants[2] : variants[0];
+    } else {
+      selectedResponse = variants[0];
+    }
+
+    setState(() {
+      _controller.text = selectedResponse;
+    });
+
+    _instructionController.clear();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('AI 응답이 재생성되었습니다')),
+    );
   }
 
   @override
@@ -54,6 +90,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    // CARD 1: Original Inquiry
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
@@ -76,6 +113,41 @@ class _ReviewScreenState extends State<ReviewScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+
+                    // CARD 2: Korean Translation (conditional)
+                    if (widget.inquiry.subjectKo != null || widget.inquiry.contentKo != null) ...[
+                      Card(
+                        color: AppColors.accentYellow.withValues(alpha: 0.3),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(Icons.translate, size: 20, color: AppColors.primaryDark),
+                                  const SizedBox(width: 8),
+                                  Text('한국어 번역', style: AppTextStyles.headline),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              if (widget.inquiry.subjectKo != null) ...[
+                                _buildInfoRow('제목', widget.inquiry.subjectKo!),
+                                const SizedBox(height: 16),
+                              ],
+                              if (widget.inquiry.contentKo != null) ...[
+                                Text('내용', style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600)),
+                                const SizedBox(height: 8),
+                                Text(widget.inquiry.contentKo!, style: AppTextStyles.body),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+
+                    // CARD 3: AI Response with Regeneration Controls
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
@@ -111,6 +183,65 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               ),
                             ],
                             const SizedBox(height: 16),
+
+                            // Regeneration controls section
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundGray,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: AppColors.textGray.withValues(alpha: 0.3)),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(Icons.refresh, size: 18, color: AppColors.accentOrange),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'AI 응답 재생성',
+                                        style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 12),
+                                  TextField(
+                                    controller: _instructionController,
+                                    maxLines: 2,
+                                    style: AppTextStyles.body,
+                                    decoration: InputDecoration(
+                                      hintText: '예: "더 친근하게", "할인 코드 포함", "간결하게"',
+                                      hintStyle: AppTextStyles.caption.copyWith(color: AppColors.textGray),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      filled: true,
+                                      fillColor: AppColors.backgroundWhite,
+                                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton.icon(
+                                      onPressed: _regenerateResponse,
+                                      icon: const Icon(Icons.auto_fix_high, size: 18),
+                                      label: const Text('재생성'),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.accentOrange,
+                                        foregroundColor: AppColors.backgroundWhite,
+                                        padding: const EdgeInsets.symmetric(vertical: 12),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 16),
+
+                            // AI response text field
                             TextField(
                               controller: _controller,
                               maxLines: 10,
@@ -129,6 +260,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
+
+                    // Action buttons
                     Row(
                       children: [
                         Expanded(

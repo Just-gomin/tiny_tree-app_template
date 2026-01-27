@@ -11,6 +11,9 @@ class Inquiry {
   final String? aiResponse;
   final String? appliedPolicy;
   final DateTime? respondedAt;
+  final String? subjectKo;
+  final String? contentKo;
+  final List<String>? responseVariants;
 
   Inquiry({
     required this.id,
@@ -23,6 +26,9 @@ class Inquiry {
     this.aiResponse,
     this.appliedPolicy,
     this.respondedAt,
+    this.subjectKo,
+    this.contentKo,
+    this.responseVariants,
   });
 
   Inquiry copyWith({
@@ -36,6 +42,9 @@ class Inquiry {
     String? aiResponse,
     String? appliedPolicy,
     DateTime? respondedAt,
+    String? subjectKo,
+    String? contentKo,
+    List<String>? responseVariants,
   }) {
     return Inquiry(
       id: id ?? this.id,
@@ -48,6 +57,9 @@ class Inquiry {
       aiResponse: aiResponse ?? this.aiResponse,
       appliedPolicy: appliedPolicy ?? this.appliedPolicy,
       respondedAt: respondedAt ?? this.respondedAt,
+      subjectKo: subjectKo ?? this.subjectKo,
+      contentKo: contentKo ?? this.contentKo,
+      responseVariants: responseVariants ?? this.responseVariants,
     );
   }
 }
