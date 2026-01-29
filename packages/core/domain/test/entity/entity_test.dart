@@ -1,19 +1,6 @@
 import 'package:domain/domain.dart';
 import 'package:test/test.dart';
 
-// 테스트용 Entity 구현
-class TestEntity extends Entity<String> {
-  final String name;
-
-  const TestEntity({
-    required String id,
-    required this.name,
-  }) : super(id);
-
-  @override
-  List<Object?> get props => [id]; // ID만으로 비교
-}
-
 void main() {
   group('Entity', () {
     test('같은 ID를 가진 엔티티는 동등하다', () {
@@ -21,6 +8,7 @@ void main() {
       const TestEntity entity2 = TestEntity(id: '1', name: 'Bob');
 
       expect(entity1, equals(entity2));
+      expect(entity1.name, isNot(equals(entity2.name)));
       expect(entity1.hashCode, equals(entity2.hashCode));
     });
 
@@ -29,6 +17,7 @@ void main() {
       const TestEntity entity2 = TestEntity(id: '2', name: 'Alice');
 
       expect(entity1, isNot(equals(entity2)));
+      expect(entity1.name, equals(entity2.name));
       expect(entity1.hashCode, isNot(equals(entity2.hashCode)));
     });
 
@@ -39,4 +28,14 @@ void main() {
       expect(entity.toString(), contains('1'));
     });
   });
+}
+
+// 테스트용 Entity 구현
+class TestEntity extends Entity<String> {
+  const TestEntity({required String id, required this.name}) : super(id);
+
+  final String name;
+
+  @override
+  List<Object?> get props => <Object?>[id]; // ID만으로 비교
 }

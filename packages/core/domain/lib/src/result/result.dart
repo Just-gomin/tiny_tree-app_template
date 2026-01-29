@@ -38,6 +38,9 @@ sealed class Result<F extends Failure, S> extends Equatable {
   /// Result를 생성합니다.
   const Result();
 
+  @override
+  List<Object?> get props;
+
   /// Result가 성공인지 확인합니다.
   bool get isSuccess => this is Success<F, S>;
 
