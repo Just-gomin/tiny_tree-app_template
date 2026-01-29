@@ -19,13 +19,16 @@ analyzer:
 
 linter:
   rules:
+    always_use_package_imports: false # make simply import files from same packages
     always_put_required_named_parameters_first: false
     avoid_annotating_with_dynamic: false
     avoid_classes_with_only_static_members: false
     cascade_invocations: false
     comment_references: false
     library_private_types_in_public_api: false
-    omit_obvious_property_types: false # make cleary declare the type
+    omit_local_variable_types: false # make sure to specify the type for local variable
+    omit_obvious_local_variable_types: false # make sure to specify the type for local variable
+    omit_obvious_property_types: false # make sure to specify the type
     one_member_abstracts: false
     prefer_double_quotes: false
     prefer_expression_function_bodies: false
