@@ -7,7 +7,8 @@ environment:
 dev_dependencies:
   melos: ^7.3.0
 
-workspace: []
+workspace:
+  - packages/core/domain
 
 melos:
   repository: https://github.com/Just-gomin/tiny_tree-app_template
@@ -33,7 +34,8 @@ melos:
         flutter: ">=3.38.0"
       
       dependencies:
-      
+        equatable: ^2.0.7
+
       dev_dependencies:
       
       hook:
