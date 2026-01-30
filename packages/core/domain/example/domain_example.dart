@@ -150,6 +150,8 @@ void main() async {
           print('Unauthorized');
         case ServerFailure():
           print('Server error');
+        case StorageFailure():
+          print('Storage error');
         case UnknownFailure(:final error):
           print('Unknown error: $error');
       }

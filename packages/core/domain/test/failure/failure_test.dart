@@ -249,6 +249,76 @@ void main() {
     });
   });
 
+  group('StorageFailure', () {
+    test('creates instance with message only', () {
+      // Arrange & Act
+      const StorageFailure failure = StorageFailure('Storage error');
+
+      // Assert
+      expect(failure.message, equals('Storage error'));
+      expect(failure.key, isNull);
+      expect(failure.operation, isNull);
+    });
+
+    test('creates instance with key and operation', () {
+      // Arrange & Act
+      const StorageFailure failure = StorageFailure(
+        'Failed to read',
+        key: 'user_token',
+        operation: 'read',
+      );
+
+      // Assert
+      expect(failure.message, equals('Failed to read'));
+      expect(failure.key, equals('user_token'));
+      expect(failure.operation, equals('read'));
+    });
+
+    test('equatable works correctly', () {
+      // Arrange
+      const StorageFailure failure1 = StorageFailure('msg', key: 'k1');
+      const StorageFailure failure2 = StorageFailure('msg', key: 'k1');
+      const StorageFailure failure3 = StorageFailure('msg', key: 'k2');
+
+      // Act & Assert
+      expect(failure1, equals(failure2));
+      expect(failure1, isNot(equals(failure3)));
+    });
+
+    test('includes key and operation in props', () {
+      // Arrange & Act
+      const StorageFailure failure =
+          StorageFailure('msg', key: 'k', operation: 'write');
+
+      // Assert
+      expect(failure.props, contains('msg'));
+      expect(failure.props, contains('k'));
+      expect(failure.props, contains('write'));
+    });
+
+    test('operation가 다르면 동등하지 않다', () {
+      // Arrange
+      const StorageFailure failure1 =
+          StorageFailure('Error', key: 'k1', operation: 'read');
+      const StorageFailure failure2 =
+          StorageFailure('Error', key: 'k1', operation: 'write');
+
+      // Act & Assert
+      expect(failure1, isNot(equals(failure2)));
+    });
+
+    test('같은 key와 operation을 가지면 동등하다', () {
+      // Arrange
+      const StorageFailure failure1 =
+          StorageFailure('Error', key: 'k1', operation: 'read');
+      const StorageFailure failure2 =
+          StorageFailure('Error', key: 'k1', operation: 'read');
+
+      // Act & Assert
+      expect(failure1, equals(failure2));
+    });
+  });
+
   group('UnknownFailure', () {
     test('error와 stackTrace 없이 생성할 수 있다', () {
       // Arrange & Act
@@ -329,6 +399,7 @@ void main() {
         NotFoundFailure('NotFound'),
         UnauthorizedFailure('Unauthorized'),
         ServerFailure('Server'),
+        StorageFailure('Storage'),
         UnknownFailure('Unknown'),
       ];
 
@@ -364,6 +435,18 @@ void main() {
       expect(result, equals('validation:Invalid:email'));
     });
 
+    test('StorageFailure를 정확히 식별할 수 있다', () {
+      // Arrange
+      const StorageFailure failure =
+          StorageFailure('Read failed', key: 'token', operation: 'read');
+
+      // Act
+      final String result = _handleFailure(failure);
+
+      // Assert
+      expect(result, equals('storage:Read failed:token:read'));
+    });
+
     test('모든 Failure 타입이 exhaustive하게 처리된다', () {
       // Arrange
       const Failure networkFailure = NetworkFailure('Test');
@@ -371,6 +454,7 @@ void main() {
       const Failure notFoundFailure = NotFoundFailure('Test');
       const Failure unauthorizedFailure = UnauthorizedFailure('Test');
       const Failure serverFailure = ServerFailure('Test');
+      const Failure storageFailure = StorageFailure('Test');
       const Failure unknownFailure = UnknownFailure('Test');
 
       // Act & Assert - 컴파일이 성공하면 exhaustive checking이 동작함
@@ -379,6 +463,7 @@ void main() {
       expect(_handleFailure(notFoundFailure), contains('notfound'));
       expect(_handleFailure(unauthorizedFailure), contains('unauthorized'));
       expect(_handleFailure(serverFailure), contains('server'));
+      expect(_handleFailure(storageFailure), contains('storage'));
       expect(_handleFailure(unknownFailure), contains('unknown'));
     });
   });
@@ -396,6 +481,12 @@ String _handleFailure(Failure failure) {
     UnauthorizedFailure(:final String message) => 'unauthorized:$message',
     ServerFailure(:final String message, :final String? errorCode) =>
       'server:$message:$errorCode',
+    StorageFailure(
+      :final String message,
+      :final String? key,
+      :final String? operation
+    ) =>
+      'storage:$message:$key:$operation',
     UnknownFailure(:final String message) => 'unknown:$message',
   };
 }

@@ -99,6 +99,21 @@ final class ServerFailure extends Failure {
   List<Object?> get props => <Object?>[message, errorCode];
 }
 
+/// Storage operation failures (file, cache, preferences, secure storage)
+final class StorageFailure extends Failure {
+  /// StorageFailure를 생성합니다.
+  const StorageFailure(super.message, {this.key, this.operation});
+
+  /// The storage key that failed (optional)
+  final String? key;
+
+  /// The operation type (read, write, delete, clear)
+  final String? operation;
+
+  @override
+  List<Object?> get props => <Object?>[message, key, operation];
+}
+
 /// 알 수 없는 실패.
 ///
 /// 다른 실패 타입으로 분류할 수 없는 경우에 사용합니다.
