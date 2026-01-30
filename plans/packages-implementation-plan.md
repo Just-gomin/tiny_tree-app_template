@@ -13,10 +13,101 @@ Tiny Tree App Template의 모노레포 패키지 구조를 완성하는 계획�
 
 ### 목표
 
-- 8개 Phase로 나누어 모든 필수 패키지 구현
+- 9개 Phase로 나누어 모든 필수 패키지 구현
 - 각 Phase는 별도 브랜치에서 2시간 이내 완료
-- 모든 패키지에 테스트 코드 필수 포함
+- 모든 패키지에 테스트 코드 필수 포함 (최소 80% 커버리지)
 - CLAUDE.md의 아키텍처 원칙 엄격히 준수
+
+---
+
+## 🎯 Phase 0: Failure 타입 사전 정의
+
+### 브랜치
+
+```bash
+git checkout -b feat/domain-failure-types
+```
+
+### 작업 내용
+
+#### 1. StorageFailure 추가
+
+```bash
+cd packages/core/domain
+```
+
+#### 2. lib/src/failure/failure.dart 수정
+
+기존 파일에 StorageFailure 추가:
+
+```dart
+/// Storage operation failures (file, cache, preferences, secure storage)
+final class StorageFailure extends Failure {
+  const StorageFailure(super.message, {this.key, this.operation});
+
+  /// The storage key that failed (optional)
+  final String? key;
+
+  /// The operation type (read, write, delete, clear)
+  final String? operation;
+
+  @override
+  List<Object?> get props => <Object?>[message, key, operation];
+}
+```
+
+#### 3. test/failure/failure_test.dart에 테스트 추가
+
+```dart
+group('StorageFailure', () {
+  test('creates instance with message only', () {
+    const failure = StorageFailure('Storage error');
+    expect(failure.message, 'Storage error');
+    expect(failure.key, isNull);
+    expect(failure.operation, isNull);
+  });
+
+  test('creates instance with key and operation', () {
+    const failure = StorageFailure(
+      'Failed to read',
+      key: 'user_token',
+      operation: 'read',
+    );
+    expect(failure.key, 'user_token');
+    expect(failure.operation, 'read');
+  });
+
+  test('equatable works correctly', () {
+    const failure1 = StorageFailure('msg', key: 'k1');
+    const failure2 = StorageFailure('msg', key: 'k1');
+    const failure3 = StorageFailure('msg', key: 'k2');
+
+    expect(failure1, equals(failure2));
+    expect(failure1, isNot(equals(failure3)));
+  });
+
+  test('includes key and operation in props', () {
+    const failure = StorageFailure('msg', key: 'k', operation: 'write');
+    expect(failure.props, contains('msg'));
+    expect(failure.props, contains('k'));
+    expect(failure.props, contains('write'));
+  });
+});
+```
+
+### 검증
+
+```bash
+cd packages/core/domain
+dart analyze
+dart test
+```
+
+### 예상 소요 시간: 30분
+
+- Failure 클래스 추가: 10분
+- 테스트 작성: 15분
+- 검증 및 PR: 5분
 
 ---
 
@@ -132,7 +223,7 @@ melos bootstrap
 
 ---
 
-## 🎯 Phase 2: packages/core/storage + utils
+## 🎯 Phase 2: packages/core/storage_interface + utils
 
 ### 브랜치
 
@@ -142,20 +233,20 @@ git checkout -b feat/package-core-storage-utils
 
 ### 작업 내용
 
-#### packages/core/storage (인터페이스만)
+#### packages/core/storage_interface (인터페이스만)
 
 ##### 1. 패키지 생성
 
 ```bash
 cd packages/core
-dart create storage
-cd storage
+dart create storage_interface
+cd storage_interface
 ```
 
 ##### 2. pubspec.yaml
 
 ```yaml
-name: storage
+name: storage_interface
 description: Storage interfaces for TinyTree
 version: 0.1.0
 publish_to: none
@@ -177,10 +268,10 @@ dev_dependencies:
 
 ```text
 lib/
-├── storage.dart
+├── storage_interface.dart (배럴 파일)
 └── src/
-    ├── storage_interface.dart
-    └── secure_storage_interface.dart
+    ├── i_storage.dart
+    └── i_secure_storage.dart
 ```
 
 ##### 4. 핵심 인터페이스
@@ -205,18 +296,7 @@ abstract class ISecureStorage {
 }
 ```
 
-##### 5. Failure 추가 (domain 패키지에)
-
-```dart
-// packages/core/domain/lib/src/failure/failure.dart에 추가
-final class StorageFailure extends Failure {
-  const StorageFailure(super.message, {this.key});
-  final String? key;
-
-  @override
-  List<Object?> get props => <Object?>[message, key];
-}
-```
+**참고**: StorageFailure는 Phase 0에서 이미 domain 패키지에 추가되었습니다.
 
 #### packages/core/utils (순수 Dart 유틸리티)
 
@@ -486,7 +566,7 @@ melos bootstrap
 
 ---
 
-## 🎯 Phase 5: packages/app_core/storage + utils
+## 🎯 Phase 5: packages/app_core/storage_impl + utils
 
 ### 브랜치
 
@@ -496,20 +576,20 @@ git checkout -b feat/package-app-core-storage-utils
 
 ### 작업 내용
 
-#### packages/app_core/storage (구현체)
+#### packages/app_core/storage_impl (구현체)
 
 ##### 1. 패키지 생성
 
 ```bash
 cd packages/app_core
-flutter create --template=package storage
-cd storage
+flutter create --template=package storage_impl
+cd storage_impl
 ```
 
 ##### 2. pubspec.yaml
 
 ```yaml
-name: storage
+name: storage_impl
 description: Storage implementations for Flutter
 version: 0.1.0
 publish_to: none
@@ -524,8 +604,8 @@ dependencies:
     sdk: flutter
   domain:
     path: ../../core/domain
-  storage:
-    path: ../../core/storage
+  storage_interface:
+    path: ../../core/storage_interface
   shared_preferences: ^2.3.4
   flutter_secure_storage: ^9.2.2
 
@@ -540,7 +620,7 @@ dev_dependencies:
 
 ```text
 lib/
-├── storage.dart
+├── storage_impl.dart (배럴 파일)
 └── src/
     ├── shared_prefs_storage.dart
     ├── secure_storage_impl.dart
@@ -552,6 +632,61 @@ lib/
 - **SharedPrefsStorage implements IStorage**
 - **SecureStorageImpl implements ISecureStorage**
 - Result 패턴으로 모든 메서드 구현
+
+##### 5. 플랫폼별 제약사항 및 구현 세부사항
+
+###### iOS
+
+- **구현체**: Keychain Services
+- **제약사항**:
+  - 앱 삭제 시 데이터 유지 여부 설정 가능 (`kSecAttrAccessible`)
+  - Simulator에서 Keychain 동작이 실제 기기와 다를 수 있음
+  - Face ID/Touch ID 인증 연동 가능
+
+###### Android
+
+- **구현체**: EncryptedSharedPreferences
+- **최소 버전**: API 23 (Android 6.0 Marshmallow)
+- **제약사항**:
+  - Android Keystore 사용
+  - 앱 삭제 시 데이터 자동 삭제
+  - 루팅된 기기에서 보안 약화 가능성
+
+###### Web
+
+- **지원 여부**: ❌ **미지원**
+- **이유**: flutter_secure_storage는 Web을 지원하지 않음
+- **대안**:
+  - 중요하지 않은 데이터: localStorage (SharedPreferences)
+  - 중요 데이터: 서버 세션 기반 인증 권장
+  - 암호화 필요 시: 별도 라이브러리 (crypto, pointycastle) + localStorage
+
+###### Desktop (Linux/macOS/Windows)
+
+- **구현체**:
+  - Linux: Secret Service API (libsecret)
+  - macOS: Keychain
+  - Windows: Credential Manager
+- **제약사항**: 플랫폼별 설정 필요
+
+###### 코드 예시: 플랫폼 체크
+
+```dart
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+class SecureStorageImpl implements ISecureStorage {
+  SecureStorageImpl() {
+    if (kIsWeb) {
+      throw UnsupportedError(
+        'SecureStorage is not supported on Web platform. '
+        'Use server-side session or encrypted localStorage instead.',
+      );
+    }
+  }
+
+  // ... 구현 ...
+}
+```
 
 #### packages/app_core/utils (Flutter 유틸리티)
 
@@ -727,11 +862,11 @@ git checkout -b feat/workspace-integration
 workspace:
   - packages/core/domain
   - packages/core/network
-  - packages/core/storage
+  - packages/core/storage_interface
   - packages/core/utils
   - packages/app_core/theme
   - packages/app_core/ui_kit
-  - packages/app_core/storage
+  - packages/app_core/storage_impl
   - packages/app_core/utils
   - packages/testing
 ```
@@ -741,13 +876,49 @@ workspace:
 ```yaml
 melos:
   scripts:
+    # 패키지 유형별로 다른 분석 도구 사용
+    analyze:core:
+      description: Analyze core packages (pure Dart)
+      run: dart analyze
+      packageFilters:
+        scope: 'packages/core/*'
+
+    analyze:flutter:
+      description: Analyze Flutter packages
+      run: flutter analyze
+      packageFilters:
+        scope:
+          - 'packages/app_core/*'
+          - 'packages/testing'
+          - 'apps/*'
+
     analyze:
       description: Analyze all packages
-      run: melos exec -- flutter analyze
+      run: |
+        melos run analyze:core
+        melos run analyze:flutter
+
+    # 테스트도 동일하게 분리
+    test:core:
+      description: Test core packages
+      run: dart test
+      packageFilters:
+        scope: 'packages/core/*'
+
+    test:flutter:
+      description: Test Flutter packages
+      run: flutter test
+      packageFilters:
+        scope:
+          - 'packages/app_core/*'
+          - 'packages/testing'
+          - 'apps/*'
 
     test:
-      description: Run tests for all packages
-      run: melos exec -- flutter test
+      description: Run all tests
+      run: |
+        melos run test:core
+        melos run test:flutter
 
     format:
       description: Format all packages
@@ -755,7 +926,7 @@ melos:
 
     clean:
       description: Clean all packages
-      run: melos exec -- flutter clean
+      run: melos exec -- flutter clean || dart pub cache clean
 ```
 
 #### 3. 전체 검증
@@ -770,16 +941,54 @@ melos run format
 
 #### 4. 의존성 그래프 문서화
 
-```text
-domain
-  ↓
-network, storage, utils
-  ↓
-theme
-  ↓
-ui_kit, app_core/storage, app_core/utils
-  ↓
-testing
+```mermaid
+graph TD
+    %% Core packages
+    domain[core/domain<br/>Entity, Failure, Result]
+    network[core/network<br/>HTTP Client]
+    storage_if[core/storage_interface<br/>Storage Contracts]
+    utils_core[core/utils<br/>Pure Dart Utils]
+
+    %% App Core packages
+    theme[app_core/theme<br/>Material3 Theme]
+    ui_kit[app_core/ui_kit<br/>UI Components]
+    storage_impl[app_core/storage_impl<br/>Storage Implementations]
+    utils_app[app_core/utils<br/>Flutter Utils]
+
+    %% Testing
+    testing[testing<br/>Mocks & Fixtures]
+
+    %% Apps
+    example[apps/example<br/>Sample App]
+
+    %% Dependencies
+    domain --> network
+    domain --> storage_if
+    domain --> utils_core
+    domain --> theme
+    theme --> ui_kit
+    theme --> utils_app
+    domain --> storage_impl
+    storage_if --> storage_impl
+    network --> testing
+    storage_if --> testing
+    theme --> testing
+    network --> example
+    storage_impl --> example
+    theme --> example
+    ui_kit --> example
+    testing --> example
+
+    %% Styling
+    classDef coreClass fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef appCoreClass fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef testClass fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    classDef appClass fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+
+    class domain,network,storage_if,utils_core coreClass
+    class theme,ui_kit,storage_impl,utils_app appCoreClass
+    class testing testClass
+    class example appClass
 ```
 
 ### 검증
@@ -842,8 +1051,8 @@ dependencies:
     path: ../../packages/app_core/theme
   ui_kit:
     path: ../../packages/app_core/ui_kit
-  storage:
-    path: ../../packages/app_core/storage
+  storage_impl:
+    path: ../../packages/app_core/storage_impl
 
 dev_dependencies:
   flutter_test:
@@ -902,16 +1111,17 @@ flutter run -d chrome
 
 | Phase | 브랜치 | 작업 내용 | 시간 | 누적 |
 | :---: | :--- | :--- | :---: | :---: |
-| 1 | feat/package-core-network | core/network | 2h | 2h |
-| 2 | feat/package-core-storage-utils | core/storage + utils | 2h | 4h |
-| 3 | feat/package-app-core-theme | app_core/theme | 2h | 6h |
-| 4 | feat/package-app-core-ui-kit | app_core/ui_kit | 2h | 8h |
-| 5 | feat/package-app-core-storage-utils | app_core/storage + utils | 2h | 10h |
-| 6 | feat/package-testing | testing | 1.5h | 11.5h |
-| 7 | feat/workspace-integration | Melos 통합 | 1h | 12.5h |
-| 8 | feat/app-example | 샘플 앱 | 2h | 14.5h |
+| 0 | feat/domain-failure-types | Failure 타입 사전 정의 | 0.5h | 0.5h |
+| 1 | feat/package-core-network | core/network | 2h | 2.5h |
+| 2 | feat/package-core-storage-utils | core/storage_interface + utils | 2h | 4.5h |
+| 3 | feat/package-app-core-theme | app_core/theme | 2h | 6.5h |
+| 4 | feat/package-app-core-ui-kit | app_core/ui_kit | 2h | 8.5h |
+| 5 | feat/package-app-core-storage-utils | app_core/storage_impl + utils | 2h | 10.5h |
+| 6 | feat/package-testing | testing | 1.5h | 12h |
+| 7 | feat/workspace-integration | Melos 통합 | 1h | 13h |
+| 8 | feat/app-example | 샘플 앱 | 2h | 15h |
 
-**총 예상 시간**: 14.5시간
+**총 예상 시간**: 15시간 (기존 14.5h + Phase 0 0.5h)
 
 ---
 
