@@ -64,7 +64,7 @@ light/full 모드에서 사용할 필수 패키지 구축
 ### light vs full 모드 전략
 
 | 측면 | light 모드 | full 모드 |
-| :------: | :-----------: | :----------: |
+| :------: | :-----------: | :---------- |
 | 패키지 사용 | ❌ 없음 | ✅ app_core 패키지 활용 |
 | 구조 | 단일 앱, lib/ 직접 작성 | packages/ 기반 모듈화 |
 | 외부 패키지 | http, shared_preferences만 | 필요한 모든 패키지 |
@@ -113,52 +113,52 @@ packages/
 
 - [packages-implementation-plan.md](./packages-implementation-plan.md)
 
-### Phase 0: Failure 타입 사전 정의 (완료 예정)
+### Step 0: Failure 타입 사전 정의 (완료 예정)
 
 - StorageFailure 추가
 
-### Phase 1: core/network (예정)
+### Step 1: core/network (예정)
 
 - ApiClient (Dio 래핑)
 - Result 패턴 통합
 - 예상 시간: 2시간
 
-### Phase 2: core/storage_interface + utils (예정)
+### Step 2: core/storage_interface + utils (예정)
 
 - IStorage, ISecureStorage 인터페이스
 - 순수 Dart 유틸리티
 - 예상 시간: 2시간
 
-### Phase 3: app_core/theme (예정)
+### Step 3: app_core/theme (예정)
 
 - Material3 테마
 - Light/Dark 모드
 - 예상 시간: 2시간
 
-### Phase 4: app_core/ui_kit (예정)
+### Step 4: app_core/ui_kit (예정)
 
 - 공통 위젯 라이브러리
 - 예상 시간: 2시간
 
-### Phase 5: app_core/storage_impl + utils (예정)
+### Step 5: app_core/storage_impl + utils (예정)
 
 - SharedPreferences, SecureStorage 구현
 - Flutter 유틸리티
 - 예상 시간: 2시간
 
-### Phase 6: testing (예정)
+### Step 6: testing (예정)
 
 - Mock 객체
 - Fixture 데이터
 - 예상 시간: 1.5시간
 
-### Phase 7: Workspace 통합 (예정)
+### Step 7: Workspace 통합 (예정)
 
 - Melos 스크립트 완성
 - 전체 검증
 - 예상 시간: 1시간
 
-### Phase 8: 샘플 앱 (예정)
+### Step 8: 샘플 앱 (예정)
 
 - apps/example 생성
 - 패키지 사용 예시
@@ -166,7 +166,7 @@ packages/
 
 **총 예상 시간**: 15시간
 
-## Phase 3: 고급 기능 패키지 (미정)
+## Step 3: 고급 기능 패키지 (미정)
 
 ### 계획
 
@@ -269,4 +269,4 @@ flutter create --template=package [package_name]
 
 | 날짜 | 버전 | 변경 내용 |
 | :------: | :------: | :---------- |
-| 2025-02-02 | 1.0 | 프로젝트 계획서 작성, 패키지 개발 우선순위 반영 |
+| 2026-02-02 | 1.0 | 프로젝트 계획서 작성, 패키지 개발 우선순위 반영 |
