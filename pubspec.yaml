@@ -9,6 +9,7 @@ dev_dependencies:
 
 workspace:
   - packages/core/domain
+  - packages/core/network
 
 melos:
   repository: https://github.com/Just-gomin/tiny_tree-app_template
@@ -35,8 +36,14 @@ melos:
       
       dependencies:
         equatable: ^2.0.7
+        logging: ^1.2.0
 
       dev_dependencies:
+          build_runner: ^2.4.13
+          http_mock_adapter: ^0.6.1
+          lints: ^6.0.0
+          mockito: ^5.4.4
+          test: ^1.25.6
       
       hook:
 
