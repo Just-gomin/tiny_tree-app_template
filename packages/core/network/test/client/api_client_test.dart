@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:domain/domain.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+import 'package:http_mock_adapter/src/handlers/request_handler.dart';
 import 'package:network/src/client/api_client.dart';
 import 'package:test/test.dart';
 
@@ -26,12 +27,12 @@ void main() {
 
       dioAdapter.onGet(
         path,
-        (server) => server.reply(200, mockResponse),
+        (MockServer server) => server.reply(200, mockResponse),
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.get<dynamic>(path);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .get<dynamic>(path);
 
       // Assert
       expect(result, isA<Success<NetworkFailure, dynamic>>());
@@ -42,14 +43,11 @@ void main() {
       // Arrange
       const String path = '/users/999';
 
-      dioAdapter.onGet(
-        path,
-        (server) => server.reply(404, null),
-      );
+      dioAdapter.onGet(path, (MockServer server) => server.reply(404, null));
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.get<dynamic>(path);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .get<dynamic>(path);
 
       // Assert
       expect(result, isA<Error<NetworkFailure, dynamic>>());
@@ -69,13 +67,13 @@ void main() {
 
       dioAdapter.onGet(
         path,
-        (server) => server.reply(200, mockResponse),
+        (MockServer server) => server.reply(200, mockResponse),
         queryParameters: queryParams,
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.get<dynamic>(path, queryParameters: queryParams);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .get<dynamic>(path, queryParameters: queryParams);
 
       // Assert
       expect(result, isA<Success<NetworkFailure, dynamic>>());
@@ -97,13 +95,13 @@ void main() {
 
       dioAdapter.onPost(
         path,
-        (server) => server.reply(201, mockResponse),
+        (MockServer server) => server.reply(201, mockResponse),
         data: requestData,
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.post<dynamic>(path, data: requestData);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .post<dynamic>(path, data: requestData);
 
       // Assert
       expect(result, isA<Success<NetworkFailure, dynamic>>());
@@ -119,16 +117,15 @@ void main() {
 
       dioAdapter.onPost(
         path,
-        (server) => server.reply(
-          400,
-          <String, dynamic>{'message': 'Invalid email format'},
-        ),
+        (MockServer server) => server.reply(400, <String, dynamic>{
+          'message': 'Invalid email format',
+        }),
         data: requestData,
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.post<dynamic>(path, data: requestData);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .post<dynamic>(path, data: requestData);
 
       // Assert
       expect(result, isA<Error<NetworkFailure, dynamic>>());
@@ -151,13 +148,13 @@ void main() {
 
       dioAdapter.onPut(
         path,
-        (server) => server.reply(200, mockResponse),
+        (MockServer server) => server.reply(200, mockResponse),
         data: requestData,
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.put<dynamic>(path, data: requestData);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .put<dynamic>(path, data: requestData);
 
       // Assert
       expect(result, isA<Success<NetworkFailure, dynamic>>());
@@ -170,14 +167,11 @@ void main() {
       // Arrange
       const String path = '/users/1';
 
-      dioAdapter.onDelete(
-        path,
-        (server) => server.reply(204, null),
-      );
+      dioAdapter.onDelete(path, (MockServer server) => server.reply(204, null));
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.delete<dynamic>(path);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .delete<dynamic>(path);
 
       // Assert
       expect(result, isA<Success<NetworkFailure, dynamic>>());
@@ -199,13 +193,13 @@ void main() {
 
       dioAdapter.onPatch(
         path,
-        (server) => server.reply(200, mockResponse),
+        (MockServer server) => server.reply(200, mockResponse),
         data: requestData,
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.patch<dynamic>(path, data: requestData);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .patch<dynamic>(path, data: requestData);
 
       // Assert
       expect(result, isA<Success<NetworkFailure, dynamic>>());
@@ -218,14 +212,11 @@ void main() {
       // Arrange
       const String path = '/error';
 
-      dioAdapter.onGet(
-        path,
-        (server) => server.reply(500, null),
-      );
+      dioAdapter.onGet(path, (MockServer server) => server.reply(500, null));
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.get<dynamic>(path);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .get<dynamic>(path);
 
       // Assert
       expect(result, isA<Error<NetworkFailure, dynamic>>());
@@ -239,7 +230,7 @@ void main() {
 
       dioAdapter.onGet(
         path,
-        (server) => server.throws(
+        (MockServer server) => server.throws(
           404,
           DioException(
             requestOptions: RequestOptions(path: path),
@@ -249,8 +240,8 @@ void main() {
       );
 
       // Act
-      final Result<NetworkFailure, dynamic> result =
-          await apiClient.get<dynamic>(path);
+      final Result<NetworkFailure, dynamic> result = await apiClient
+          .get<dynamic>(path);
 
       // Assert
       expect(result, isA<Error<NetworkFailure, dynamic>>());

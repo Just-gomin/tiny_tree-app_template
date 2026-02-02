@@ -144,7 +144,6 @@ void main() {
       // Arrange
       final DioException exception = DioException(
         requestOptions: RequestOptions(path: '/test'),
-        type: DioExceptionType.unknown,
         message: 'Custom error message',
       );
 
@@ -344,9 +343,7 @@ void main() {
         response: Response<dynamic>(
           requestOptions: RequestOptions(path: '/test'),
           statusCode: 400,
-          data: <String, dynamic>{
-            'error': 'Invalid input format',
-          },
+          data: <String, dynamic>{'error': 'Invalid input format'},
         ),
       );
 
@@ -367,9 +364,7 @@ void main() {
           requestOptions: RequestOptions(path: '/test'),
           statusCode: 500,
           data: <String, dynamic>{
-            'error': <String, dynamic>{
-              'message': 'Database connection failed',
-            },
+            'error': <String, dynamic>{'message': 'Database connection failed'},
           },
         ),
       );

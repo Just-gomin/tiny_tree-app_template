@@ -19,10 +19,7 @@ void main() {
         logRecords.add(record);
       });
 
-      interceptor = LoggingInterceptor(
-        logger: testLogger,
-        logLevel: Level.ALL,
-      );
+      interceptor = LoggingInterceptor(logger: testLogger, logLevel: Level.ALL);
     });
 
     tearDown(() {
@@ -67,7 +64,10 @@ void main() {
         expect(logRecords, isNotEmpty);
         expect(logRecords.first.level, equals(Level.INFO));
         expect(logRecords.first.message, contains('REQUEST: GET'));
-        expect(logRecords.first.message, contains('https://api.example.com/test'));
+        expect(
+          logRecords.first.message,
+          contains('https://api.example.com/test'),
+        );
       });
 
       test('민감한 헤더를 마스킹한다 (authorization)', () {
@@ -88,8 +88,14 @@ void main() {
         interceptor.onRequest(options, handler);
 
         // Assert
-        expect(logRecords.first.message, contains('Authorization: ***MASKED***'));
-        expect(logRecords.first.message, contains('Content-Type: application/json'));
+        expect(
+          logRecords.first.message,
+          contains('Authorization: ***MASKED***'),
+        );
+        expect(
+          logRecords.first.message,
+          contains('Content-Type: application/json'),
+        );
         expect(logRecords.first.message, isNot(contains('secret-token')));
       });
 
@@ -145,10 +151,7 @@ void main() {
           path: '/test',
           method: 'GET',
           baseUrl: 'https://api.example.com',
-          queryParameters: <String, dynamic>{
-            'page': '1',
-            'limit': '10',
-          },
+          queryParameters: <String, dynamic>{'page': '1', 'limit': '10'},
         );
         final _MockRequestInterceptorHandler handler =
             _MockRequestInterceptorHandler();
@@ -168,7 +171,10 @@ void main() {
           path: '/test',
           method: 'POST',
           baseUrl: 'https://api.example.com',
-          data: <String, dynamic>{'username': 'testuser', 'email': 'test@example.com'},
+          data: <String, dynamic>{
+            'username': 'testuser',
+            'email': 'test@example.com',
+          },
         );
         final _MockRequestInterceptorHandler handler =
             _MockRequestInterceptorHandler();
@@ -186,7 +192,6 @@ void main() {
         // Arrange
         final LoggingInterceptor infoInterceptor = LoggingInterceptor(
           logger: testLogger,
-          logLevel: Level.INFO,
         );
         final RequestOptions options = RequestOptions(
           path: '/test',
@@ -247,7 +252,10 @@ void main() {
         expect(logRecords, isNotEmpty);
         expect(logRecords.first.level, equals(Level.INFO));
         expect(logRecords.first.message, contains('RESPONSE: 200'));
-        expect(logRecords.first.message, contains('https://api.example.com/test'));
+        expect(
+          logRecords.first.message,
+          contains('https://api.example.com/test'),
+        );
       });
 
       test('FINE 레벨에서는 응답 데이터를 로깅한다', () {
@@ -276,7 +284,6 @@ void main() {
         // Arrange
         final LoggingInterceptor infoInterceptor = LoggingInterceptor(
           logger: testLogger,
-          logLevel: Level.INFO,
         );
         final Response<dynamic> response = Response<dynamic>(
           requestOptions: RequestOptions(
@@ -409,7 +416,6 @@ void main() {
           path: '/test',
           method: 'POST',
           baseUrl: 'https://api.example.com',
-          data: null,
         );
         final _MockRequestInterceptorHandler handler =
             _MockRequestInterceptorHandler();
@@ -439,7 +445,10 @@ void main() {
 
         // Assert
         expect(logRecords.first.message, contains('(truncated)'));
-        expect(logRecords.first.message.length, lessThan(longData.length + 500));
+        expect(
+          logRecords.first.message.length,
+          lessThan(longData.length + 500),
+        );
       });
     });
 
