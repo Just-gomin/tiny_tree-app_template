@@ -14,7 +14,7 @@ class ApiClient {
   /// ApiClientConfig를 사용하여 ApiClient를 생성합니다.
   ///
   /// [config]: API 클라이언트 설정
-  ApiClient(ApiClientConfig config)
+  ApiClient({required this.config})
     : _dio = Dio(
         BaseOptions(
           baseUrl: config.baseUrl,
@@ -28,10 +28,7 @@ class ApiClient {
     // Interceptor 등록 순서: Logging -> Error
     if (config.enableLogging) {
       _dio.interceptors.add(
-        LoggingInterceptor(
-          logger: config.logger,
-          logLevel: config.logLevel,
-        ),
+        LoggingInterceptor(logger: config.logger, logLevel: config.logLevel),
       );
     }
     _dio.interceptors.add(ErrorInterceptor());
@@ -41,7 +38,13 @@ class ApiClient {
   /// 테스트용 생성자: 커스텀 Dio 인스턴스를 주입합니다.
   ///
   /// 이 생성자는 테스트 목적으로만 사용됩니다.
-  ApiClient.withDio(this._dio) : _failureMapper = const FailureMapper();
+  ApiClient.withDio(this._dio)
+    : _failureMapper = const FailureMapper(),
+      config = ApiClientConfig(baseUrl: _dio.options.baseUrl);
+
+  /// ApiClientConfig
+  /// API 클라이언트 설정
+  final ApiClientConfig config;
 
   final Dio _dio;
   final FailureMapper _failureMapper;
@@ -69,9 +72,14 @@ class ApiClient {
       return Success<NetworkFailure, T>(response.data as T);
     } on DioException catch (e) {
       return Error<NetworkFailure, T>(_failureMapper.map(e));
-    } on Exception catch (e) {
+    } on Exception catch (e, stackTrace) {
+      if (config.enableLogging) {
+        config.logger?.warning('Unexpected error occurred', e, stackTrace);
+      }
       // DioException이 아닌 예외 (예: JSON 파싱 에러)
-      return Error<NetworkFailure, T>(NetworkFailure('Unexpected error: $e'));
+      return Error<NetworkFailure, T>(
+        const NetworkFailure('Unexpected error occurred'),
+      );
     }
   }
 
@@ -99,8 +107,14 @@ class ApiClient {
       return Success<NetworkFailure, T>(response.data as T);
     } on DioException catch (e) {
       return Error<NetworkFailure, T>(_failureMapper.map(e));
-    } on Exception catch (e) {
-      return Error<NetworkFailure, T>(NetworkFailure('Unexpected error: $e'));
+    } on Exception catch (e, stackTrace) {
+      if (config.enableLogging) {
+        config.logger?.warning('Unexpected error occurred', e, stackTrace);
+      }
+      // DioException이 아닌 예외 (예: JSON 파싱 에러)
+      return Error<NetworkFailure, T>(
+        const NetworkFailure('Unexpected error occurred'),
+      );
     }
   }
 
@@ -128,8 +142,14 @@ class ApiClient {
       return Success<NetworkFailure, T>(response.data as T);
     } on DioException catch (e) {
       return Error<NetworkFailure, T>(_failureMapper.map(e));
-    } on Exception catch (e) {
-      return Error<NetworkFailure, T>(NetworkFailure('Unexpected error: $e'));
+    } on Exception catch (e, stackTrace) {
+      if (config.enableLogging) {
+        config.logger?.warning('Unexpected error occurred', e, stackTrace);
+      }
+      // DioException이 아닌 예외 (예: JSON 파싱 에러)
+      return Error<NetworkFailure, T>(
+        const NetworkFailure('Unexpected error occurred'),
+      );
     }
   }
 
@@ -157,8 +177,14 @@ class ApiClient {
       return Success<NetworkFailure, T>(response.data as T);
     } on DioException catch (e) {
       return Error<NetworkFailure, T>(_failureMapper.map(e));
-    } on Exception catch (e) {
-      return Error<NetworkFailure, T>(NetworkFailure('Unexpected error: $e'));
+    } on Exception catch (e, stackTrace) {
+      if (config.enableLogging) {
+        config.logger?.warning('Unexpected error occurred', e, stackTrace);
+      }
+      // DioException이 아닌 예외 (예: JSON 파싱 에러)
+      return Error<NetworkFailure, T>(
+        const NetworkFailure('Unexpected error occurred'),
+      );
     }
   }
 
@@ -186,8 +212,14 @@ class ApiClient {
       return Success<NetworkFailure, T>(response.data as T);
     } on DioException catch (e) {
       return Error<NetworkFailure, T>(_failureMapper.map(e));
-    } on Exception catch (e) {
-      return Error<NetworkFailure, T>(NetworkFailure('Unexpected error: $e'));
+    } on Exception catch (e, stackTrace) {
+      if (config.enableLogging) {
+        config.logger?.warning('Unexpected error occurred', e, stackTrace);
+      }
+      // DioException이 아닌 예외 (예: JSON 파싱 에러)
+      return Error<NetworkFailure, T>(
+        const NetworkFailure('Unexpected error occurred'),
+      );
     }
   }
 }
