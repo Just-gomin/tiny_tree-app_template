@@ -1,0 +1,21 @@
+name: network
+description: HTTP client wrapper with Result pattern integration
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.10.0 <4.0.0"
+
+dependencies:
+  dio: ^5.7.0
+  domain:
+    path: ../domain
+  logging: ^1.2.0
+
+dev_dependencies:
+  build_runner: ^2.4.13
+  http_mock_adapter: ^0.6.1
+  lints: ^6.0.0
+  mockito: ^5.4.4
+  test: ^1.25.6
