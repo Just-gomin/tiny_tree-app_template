@@ -10,6 +10,7 @@ dev_dependencies:
 workspace:
   - packages/core/domain
   - packages/core/network
+  - packages/core/storage_interface
 
 melos:
   repository: https://github.com/Just-gomin/tiny_tree-app_template
