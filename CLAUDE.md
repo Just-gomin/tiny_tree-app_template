@@ -16,21 +16,21 @@ Claude Code가 이 패키지들을 조합하여 light/full 모드의 MVP를 생�
 ```text
 packages/
 ├── core/                    # 순수 Dart (Flutter 의존성 없음)
-│   ├── domain/              # ✅ Result, Failure, Entity
-│   ├── network/             # 📅 HTTP Client
-│   ├── storage_interface/   # 📅 Storage Contract
-│   └── utils/               # 📅 순수 Dart Utils
+│   ├── domain/              # Result, Failure, Entity
+│   ├── network/             # HTTP Client
+│   ├── storage_interface/   # Storage Contract
+│   └── utils/               # 순수 Dart Utils
 │
 ├── app_core/                # Flutter 의존
-│   ├── auth/                # 📅 우선순위 1
-│   ├── theme/               # 📅 우선순위 2
-│   ├── ui_kit/              # 📅 우선순위 3
-│   ├── storage_impl/        # 📅 구현체
-│   └── utils/               # 📅 Flutter Utils
+│   ├── auth/                # 인증
+│   ├── theme/               # 테마
+│   ├── ui_kit/              # UI
+│   ├── storage_impl/        # Storage 구현체
+│   └── utils/               # Flutter Utils
 │
-├── features/                # Phase 3+
-├── integrations/            # Phase 3+
-└── testing/                 # Phase 3+
+├── features/                # 기능별 패키지
+├── integrations/            # 서드파티 래퍼
+└── testing/                 # 테스트 유틸리티
 ```
 
 ## Key Decisions
