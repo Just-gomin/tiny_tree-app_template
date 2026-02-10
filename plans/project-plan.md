@@ -12,13 +12,17 @@ Tiny Tree 시스템에서 실제 Flutter 앱을 생성하는 템플릿 프로젝
 - light/full 모드에 따른 패키지 조합
 - MVP 빠른 생성과 대규모 프로젝트 확장 모두 지원
 
-## 현재 상태 (Phase 1 완료)
+## 현재 상태 (Phase 2 진행중)
 
 ### ✅ 구현 완료
 
 - Melos 기반 모노레포 구조
 - `packages/core/domain` 패키지 완성
-  - Result, Failure, Entity, UseCase, ValueObject
+  - Result, Failure, Entity, UseCase, ValueObject, StorageFailure
+- `packages/core/network` 패키지 완성
+  - ApiClient, FailureMapper, ErrorInterceptor
+- `packages/core/storage_interface` 패키지 완성
+  - IStorage, ISecureStorage
 
 ### 📦 기술 스택
 
@@ -41,8 +45,8 @@ light/full 모드에서 사용할 필수 패키지 구축
 
 1. **`packages/core/`** - 순수 Dart 패키지
    - ✅ `domain` (완료)
-   - 📅 `network`
-   - 📅 `storage_interface`
+   - ✅ `network` (완료)
+   - ✅ `storage_interface` (완료)
    - 📅 `utils`
 
 2. **`packages/app_core/auth`** - 인증 기능
@@ -78,8 +82,8 @@ light/full 모드에서 사용할 필수 패키지 구축
 packages/
 ├── core/                    # 순수 Dart (Flutter 의존성 없음)
 │   ├── domain/              ✅ 완료
-│   ├── network/             📅 계획
-│   ├── storage_interface/   📅 계획
+│   ├── network/             ✅ 완료
+│   ├── storage_interface/   ✅ 완료
 │   └── utils/               📅 계획
 │
 ├── app_core/                # Flutter 의존
@@ -113,21 +117,21 @@ packages/
 
 - [packages-implementation-plan.md](./packages-implementation-plan.md)
 
-### Step 0: Failure 타입 사전 정의 (완료 예정)
+### Step 0: Failure 타입 사전 정의 (✅ 완료 - 2026-01-30)
 
 - StorageFailure 추가
+- 커밋: ee32cce
 
-### Step 1: core/network (예정)
+### Step 1: core/network (✅ 완료 - 2026-02-04)
 
 - ApiClient (Dio 래핑)
 - Result 패턴 통합
-- 예상 시간: 2시간
+- 커밋: 1e171e4
 
-### Step 2: core/storage_interface + utils (예정)
+### Step 2: core/storage_interface + utils (⚠️ 진행중)
 
-- IStorage, ISecureStorage 인터페이스
-- 순수 Dart 유틸리티
-- 예상 시간: 2시간
+- ✅ IStorage, ISecureStorage 인터페이스 (완료 - 2026-02-06, 커밋: 462de74)
+- 📅 순수 Dart 유틸리티 (미구현)
 
 ### Step 3: app_core/theme (예정)
 
@@ -270,3 +274,4 @@ flutter create --template=package [package_name]
 | 날짜 | 버전 | 변경 내용 |
 | :------: | :------: | :---------- |
 | 2026-02-02 | 1.0 | 프로젝트 계획서 작성, 패키지 개발 우선순위 반영 |
+| 2026-02-10 | 1.1 | Phase 0 (StorageFailure), Phase 1 (core/network), Phase 2-A (core/storage_interface) 완료 반영 |

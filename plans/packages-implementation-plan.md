@@ -6,8 +6,10 @@ Tiny Tree App Template의 모노레포 패키지 구조를 완성하는 계획�
 
 ### 현재 상태
 
-- ✅ `packages/core/domain` - 완전 구현 (Result, Failure, Entity, UseCase, ValueObject)
-- ❌ `packages/core/network`, `storage`, `utils` - 미구현
+- ✅ `packages/core/domain` - 완전 구현 (Result, Failure, Entity, UseCase, ValueObject, StorageFailure)
+- ✅ `packages/core/network` - 완전 구현 (ApiClient, FailureMapper, ErrorInterceptor)
+- ✅ `packages/core/storage_interface` - 완전 구현 (IStorage, ISecureStorage)
+- 📅 `packages/core/utils` - 미구현
 - ❌ `packages/app_core/*` - 전체 디렉토리 미생성
 - ❌ `packages/testing` - 미구현
 
@@ -21,6 +23,11 @@ Tiny Tree App Template의 모노레포 패키지 구조를 완성하는 계획�
 ---
 
 ## 🎯 Phase 0: Failure 타입 사전 정의
+
+### ✅ 완료 상태
+
+- 완료 일시: 2026-01-30
+- 커밋: ee32cce
 
 ### 브랜치
 
@@ -112,6 +119,12 @@ dart test
 ---
 
 ## 🎯 Phase 1: packages/core/network
+
+### ✅ 완료 상태
+
+- 완료 일시: 2026-02-04
+- 브랜치: feat/package-core-network
+- 커밋: 1e171e4
 
 ### 브랜치
 
@@ -224,6 +237,11 @@ melos bootstrap
 ---
 
 ## 🎯 Phase 2: packages/core/storage_interface + utils
+
+### ⚠️ 진행 상태
+
+- `storage_interface`: ✅ 완료 (2026-02-06, 커밋: 462de74)
+- `utils`: 📅 미구현
 
 ### 브랜치
 
@@ -1213,3 +1231,12 @@ flutter run -d chrome
 - [Melos 공식 문서](https://melos.invertase.dev/)
 - [Material 3 디자인 가이드](https://m3.material.io/)
 - [Dart 패키지 가이드](https://dart.dev/guides/libraries/create-packages)
+
+---
+
+## 변경 이력
+
+| 날짜 | 버전 | 변경 내용 |
+| :---: | :---: | :--- |
+| 2026-01-29 | 1.0 | 패키지 구현 계획 최초 작성 |
+| 2026-02-10 | 1.1 | Phase 0, 1, Phase 2-A (storage_interface) 완료 상태 반영, 현재 상태 업데이트 |
