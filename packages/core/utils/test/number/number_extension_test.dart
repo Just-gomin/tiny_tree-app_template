@@ -54,12 +54,33 @@ void main() {
     });
 
     group('withThousandsSeparator', () {
+      test('소수점 포함 천 단위 구분 기호를 추가한다', () {
+        expect(
+          1234567.89.withThousandsSeparator(),
+          equals('1,234,567.89'),
+        );
+      });
+
       test('천 단위 구분 기호를 추가한다', () {
         expect(1234567.withThousandsSeparator(), equals('1,234,567'));
       });
 
       test('1000 미만의 숫자는 구분 기호 없이 반환한다', () {
         expect(999.withThousandsSeparator(), equals('999'));
+      });
+    });
+
+    group('decimalPart', () {
+      test('소수점 부분을 반환한다', () {
+        expect(3.14.decimalPart(), closeTo(0.14, 0.001));
+      });
+
+      test('정수는 0을 반환한다', () {
+        expect(42.decimalPart(), equals(0));
+      });
+
+      test('음수에도 적용된다', () {
+        expect((-3.14).decimalPart(), closeTo(-0.14, 0.001));
       });
     });
 

@@ -87,7 +87,15 @@ extension NumExtension on num {
   /// 1234567.89.withThousandsSeparator();  // '1,234,567.89'
   /// ```
   String withThousandsSeparator({String locale = 'ko'}) {
-    return NumberFormat('#,###.##', locale).format(this);
+    final NumberFormat format = NumberFormat('#,###', locale);
+    final String str = toString();
+    final int dotIndex = str.indexOf('.');
+    if (dotIndex == -1) {
+      return format.format(this);
+    }
+    final String integerStr = str.substring(0, dotIndex);
+    final String decimalStr = str.substring(dotIndex + 1);
+    return '${format.format(int.parse(integerStr))}.$decimalStr';
   }
 
   /// 숫자가 주어진 범위 내에 있는지 확인합니다. (경계값 포함)
@@ -99,4 +107,15 @@ extension NumExtension on num {
   /// 10.isBetween(1, 10);  // true
   /// ```
   bool isBetween(num min, num max) => this >= min && this <= max;
+
+  /// 소수점 부분을 반환합니다.
+  ///
+  /// 예시:
+  /// ```dart
+  /// 3.14.decimalPart(); // 0.14
+  /// 1234.0.decimalPart(); // 0.0
+  /// ```
+  num decimalPart() {
+    return this - toInt();
+  }
 }
