@@ -8,6 +8,15 @@ final class ValidationUtils {
   /// 인스턴스 생성을 방지합니다.
   const ValidationUtils._();
 
+  /// 대문자 정규식
+  static final RegExp _uppercaseRegex = RegExp('[A-Z]');
+
+  /// 소문자 정규식
+  static final RegExp _lowercaseRegex = RegExp('[a-z]');
+
+  /// 숫자 정규식
+  static final RegExp _digitRegex = RegExp('[0-9]');
+
   // 이메일 주소 정규식 (RFC 5322 간략화 버전)
   // raw string 사용: \. 이 regex에서 리터럴 점을 의미
   static final RegExp _emailRegex = RegExp(
@@ -107,9 +116,9 @@ final class ValidationUtils {
     if (password.length < 8) {
       return false;
     }
-    final bool hasUppercase = password.contains(RegExp('[A-Z]'));
-    final bool hasLowercase = password.contains(RegExp('[a-z]'));
-    final bool hasDigit = password.contains(RegExp('[0-9]'));
+    final bool hasUppercase = password.contains(_uppercaseRegex);
+    final bool hasLowercase = password.contains(_lowercaseRegex);
+    final bool hasDigit = password.contains(_digitRegex);
     return hasUppercase && hasLowercase && hasDigit;
   }
 }
