@@ -245,6 +245,13 @@ melos bootstrap
 - `storage_interface`: ✅ 완료 (2026-02-06, 커밋: 462de74)
 - `utils`: ✅ 완료 (2026-02-11, 커밋: 8ed4598)
 
+#### 추가 개선 이력
+
+- 커밋 48d2266 (2026-02-14): NumberExtension 소수점 지원 및 천단위 구분자 리팩터링
+- 커밋 3484ea0: DateExtension `isYesterday`, `isToday`, `isTomorrow`에 `now` 파라미터 추가
+- 커밋 6b71d9f: DateExtension 정규표현식 상수 변수 정의
+- ✅ DateExtension 추가 기능 개발 완료 (미커밋)
+
 ### 브랜치
 
 ```bash
@@ -1243,3 +1250,4 @@ flutter run -d chrome
 | 2026-01-29 | 1.0 | 패키지 구현 계획 최초 작성 |
 | 2026-02-10 | 1.1 | Phase 0, 1, Phase 2-A (storage_interface) 완료 상태 반영, 현재 상태 업데이트 |
 | 2026-02-11 | 1.2 | Phase 2 전체 완료 (core/utils) 상태 반영 |
+| 2026-02-19 | 1.3 | Phase 2 추가 개선 완료 반영 (NumberExtension 소수점, DateExtension now 파라미터/정규표현식 상수화/추가 기능) |

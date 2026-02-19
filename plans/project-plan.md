@@ -134,6 +134,10 @@ packages/
 
 - ✅ IStorage, ISecureStorage 인터페이스 (완료 - 2026-02-06, 커밋: 462de74)
 - ✅ 순수 Dart 유틸리티 Extension 방식 구현 (완료 - 2026-02-11, 커밋: 8ed4598)
+- ✅ NumberExtension 소수점 지원 및 천단위 구분자 리팩터링 (커밋: 48d2266)
+- ✅ DateExtension `isYesterday`, `isToday`, `isTomorrow`에 `now` 파라미터 추가 (커밋: 3484ea0)
+- ✅ DateExtension 정규표현식 상수화 (커밋: 6b71d9f)
+- ✅ DateExtension 추가 기능 개발 완료 (2026-02-19)
 
 ### Step 3: app_core/theme (예정)
 
@@ -278,3 +282,4 @@ flutter create --template=package [package_name]
 | 2026-02-02 | 1.0 | 프로젝트 계획서 작성, 패키지 개발 우선순위 반영 |
 | 2026-02-10 | 1.1 | Phase 0 (StorageFailure), Phase 1 (core/network), Phase 2-A (core/storage_interface) 완료 반영 |
 | 2026-02-11 | 1.2 | Phase 2 전체 완료 (core/utils Extension 방식) 반영 |
+| 2026-02-19 | 1.3 | Step 2 추가 개선 완료 반영 (NumberExtension 소수점, DateExtension now 파라미터/정규표현식 상수화/추가 기능) |
