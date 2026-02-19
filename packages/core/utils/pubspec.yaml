@@ -1,6 +1,6 @@
-name: storage_interface
-description: Storage interfaces for TinyTree
-version: 0.0.1
+name: utils
+description: Pure Dart utility extensions and helpers for TinyTree
+version: 0.1.0
 publish_to: none
 resolution: workspace
 
@@ -8,8 +8,7 @@ environment:
   sdk: ">=3.10.0 <4.0.0"
 
 dependencies:
-  domain:
-    path: ../domain
+  intl: ^0.20.1
 
 dev_dependencies:
   lints: ^6.0.0

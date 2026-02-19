@@ -11,6 +11,7 @@ workspace:
   - packages/core/domain
   - packages/core/network
   - packages/core/storage_interface
+  - packages/core/utils
 
 melos:
   repository: https://github.com/Just-gomin/tiny_tree-app_template
