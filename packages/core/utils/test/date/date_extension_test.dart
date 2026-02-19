@@ -106,6 +106,82 @@ void main() {
         expect(dt.dateOnly, equals(DateTime(2024, 3, 15)));
       });
     });
+
+    group('isToday', () {
+      test('오늘 날짜는 true를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15, 12);
+        final DateTime today = DateTime(2024, 3, 15);
+        expect(today.isToday(now: now), isTrue);
+      });
+
+      test('시간이 달라도 같은 날이면 true를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15, 12);
+        final DateTime sameDay = DateTime(2024, 3, 15, 23, 59);
+        expect(sameDay.isToday(now: now), isTrue);
+      });
+
+      test('어제 날짜는 false를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        final DateTime yesterday = DateTime(2024, 3, 14);
+        expect(yesterday.isToday(now: now), isFalse);
+      });
+
+      test('내일 날짜는 false를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        final DateTime tomorrow = DateTime(2024, 3, 16);
+        expect(tomorrow.isToday(now: now), isFalse);
+      });
+    });
+
+    group('isYesterday', () {
+      test('어제 날짜는 true를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        final DateTime yesterday = DateTime(2024, 3, 14);
+        expect(yesterday.isYesterday(now: now), isTrue);
+      });
+
+      test('오늘 날짜는 false를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        expect(now.isYesterday(now: now), isFalse);
+      });
+
+      test('2일 전은 false를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        final DateTime twoDaysAgo = DateTime(2024, 3, 13);
+        expect(twoDaysAgo.isYesterday(now: now), isFalse);
+      });
+
+      test('월 경계를 올바르게 처리한다', () {
+        final DateTime now = DateTime(2024, 3);
+        final DateTime yesterday = DateTime(2024, 2, 29);
+        expect(yesterday.isYesterday(now: now), isTrue);
+      });
+    });
+
+    group('isTomorrow', () {
+      test('내일 날짜는 true를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        final DateTime tomorrow = DateTime(2024, 3, 16);
+        expect(tomorrow.isTomorrow(now: now), isTrue);
+      });
+
+      test('오늘 날짜는 false를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        expect(now.isTomorrow(now: now), isFalse);
+      });
+
+      test('모레는 false를 반환한다', () {
+        final DateTime now = DateTime(2024, 3, 15);
+        final DateTime dayAfterTomorrow = DateTime(2024, 3, 17);
+        expect(dayAfterTomorrow.isTomorrow(now: now), isFalse);
+      });
+
+      test('연도 경계를 올바르게 처리한다', () {
+        final DateTime now = DateTime(2024, 12, 31);
+        final DateTime tomorrow = DateTime(2025);
+        expect(tomorrow.isTomorrow(now: now), isTrue);
+      });
+    });
   });
 
   group('parseIso8601', () {

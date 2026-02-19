@@ -26,6 +26,7 @@ extension DateTimeExtension on DateTime {
   }
 
   /// 현재 시각 기준으로 한국어 상대 시간 표현을 반환합니다.
+  /// 의도적으로 한 달은 30일을 기준으로 삼습니다.
   ///
   /// [now]: 비교 기준 시각 (기본값: 현재 시각). 테스트 시 주입 가능합니다.
   ///
@@ -93,22 +94,24 @@ extension DateTimeExtension on DateTime {
   }
 
   /// 해당 DateTime이 오늘인지 확인합니다.
-  bool get isToday {
-    final DateTime now = DateTime.now();
-    return year == now.year && month == now.month && day == now.day;
+  bool isToday({DateTime? now}) {
+    final DateTime n = now ?? DateTime.now();
+    return year == n.year && month == n.month && day == n.day;
   }
 
   /// 해당 DateTime이 어제인지 확인합니다.
-  bool get isYesterday {
-    final DateTime yesterday = DateTime.now().subtract(const Duration(days: 1));
+  bool isYesterday({DateTime? now}) {
+    final DateTime n = now ?? DateTime.now();
+    final DateTime yesterday = n.subtract(const Duration(days: 1));
     return year == yesterday.year &&
         month == yesterday.month &&
         day == yesterday.day;
   }
 
   /// 해당 DateTime이 내일인지 확인합니다.
-  bool get isTomorrow {
-    final DateTime tomorrow = DateTime.now().add(const Duration(days: 1));
+  bool isTomorrow({DateTime? now}) {
+    final DateTime n = now ?? DateTime.now();
+    final DateTime tomorrow = n.add(const Duration(days: 1));
     return year == tomorrow.year &&
         month == tomorrow.month &&
         day == tomorrow.day;
